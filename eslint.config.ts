@@ -89,6 +89,7 @@ export default defineConfig(
 			"coverage/",
 			"dist/",
 			"docs/",
+			"houdini/",
 			"node_modules/",
 			"out/",
 
