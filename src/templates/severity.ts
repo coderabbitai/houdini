@@ -1,5 +1,5 @@
 import type { Severity } from "../severity.ts"
-import { loadState, saveState } from "../state.ts"
+import { loadState, saveSession } from "../state.ts"
 import html from "./severity.template.html"
 
 const template = document.createElement("template")
@@ -58,7 +58,7 @@ function toggleSeverity(severity: Severity) {
 
 		void loadState().then(state => {
 			state.coderabbit.visibilityState[severity] = checkbox.checked
-			return saveState(state)
+			return saveSession(state)
 		})
 	}
 }

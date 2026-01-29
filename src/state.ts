@@ -1,6 +1,7 @@
 import { storage } from "webextension-polyfill"
 import { Severity } from "./severity.js"
 import { isSeverity } from "./severity.ts"
+import { getTabId } from "./tabs.ts"
 
 type CustomBotsState = Record<string, boolean>
 type VisibilityState = Record<Severity, boolean>
@@ -13,6 +14,24 @@ interface CodeRabbitState {
 interface State extends Record<string, unknown> {
 	readonly coderabbit: CodeRabbitState
 	readonly customBots: CustomBotsState
+}
+
+function defaultState(): State {
+	return {
+		coderabbit: {
+			visibilityState: {
+				[Severity.Critical]: true,
+				[Severity.Major]: true,
+				[Severity.Minor]: true,
+			},
+			showAllState: true,
+		},
+		customBots: {},
+	}
+}
+
+function getSessionKey(tabId: number): string {
+	return `session_${tabId}`
 }
 
 function isCodeRabbitState(value: unknown): value is CodeRabbitState {
@@ -47,32 +66,45 @@ function isVisibilityState(value: unknown): value is VisibilityState {
 	)
 }
 
+async function loadSession(): Promise<State | undefined> {
+	const tabId = await getTabId()
+	if (!tabId) return
+
+	const sessionKey = getSessionKey(tabId)
+	const session = await storage.session.get(sessionKey)
+	if (!isState(session)) {
+		console.warn("Session state is invalid", { session })
+		return
+	}
+	return session
+}
+
 export async function loadState(): Promise<State> {
-	const stored = await storage.sync.get(["coderabbit", "customBots"])
-	if (!isState(stored)) {
-		console.warn("Stored state is invalid, using default state", { stored })
-		return defaultState()
-	}
+	const session = await loadSession()
+	if (session) return session
 
-	return stored
+	const sync = await loadSync()
+	if (sync) return sync
+
+	return defaultState()
 }
 
-export async function saveState(state: State): Promise<void> {
+async function loadSync() {
+	const sync = await storage.sync.get(["coderabbit", "customBots"])
+	if (!isState(sync)) {
+		console.warn("Sync state is invalid", { sync })
+		return
+	}
+
+	return sync
+}
+
+export async function saveSession(state: State): Promise<void> {
+	return storage.session.set(state)
+}
+
+export async function saveSync(state: State): Promise<void> {
 	return storage.sync.set(state)
-}
-
-function defaultState(): State {
-	return {
-		coderabbit: {
-			visibilityState: {
-				[Severity.Critical]: true,
-				[Severity.Major]: true,
-				[Severity.Minor]: true,
-			},
-			showAllState: true,
-		},
-		customBots: {},
-	}
 }
 
 if (!isState(defaultState()))
