@@ -7,13 +7,13 @@ type CustomBotsState = Record<string, boolean>
 type VisibilityState = Record<Severity, boolean>
 
 interface CodeRabbitState {
-	readonly showAllState: boolean
-	readonly visibilityState: VisibilityState
+	showAllState: boolean
+	visibilityState: VisibilityState
 }
 
 interface State extends Record<string, unknown> {
-	readonly coderabbit: CodeRabbitState
-	readonly customBots: CustomBotsState
+	coderabbit: CodeRabbitState
+	customBots: CustomBotsState
 }
 
 function defaultState(): State {

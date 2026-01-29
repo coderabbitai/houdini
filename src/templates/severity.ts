@@ -34,6 +34,7 @@ export function htmlSeverity(props: Props): HTMLDivElement {
 	refs.name.textContent = props.severity
 	refs.count.textContent = `(${props.count})`
 	refs.checkbox.checked = props.checked
+	refs.checkbox.setAttribute("data-severity", props.severity)
 	refs.checkbox.addEventListener("change", toggleSeverity(props.severity))
 
 	// 4. Extract the HTMLElement from the component and return it
