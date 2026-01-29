@@ -1,3 +1,10 @@
+/**
+ * Utilities to register event listeners on HTML elements. Allows you to narrow
+ * down the type of the {@link HTMLElement} before getting to the handler.
+ *
+ * @module
+ */
+
 type Listener<E extends HTMLElement, K extends keyof HTMLElementEventMap> = (
 	this: E,
 	ev: HTMLElementEventMap[K],

@@ -1,16 +1,17 @@
 import type { Severity } from "../severity.ts"
+import { loadState, saveState } from "../state.ts"
 import html from "./severity.template.html"
 
 const template = document.createElement("template")
 template.innerHTML = html
 
 interface Props {
-	readonly severity: Severity
-	readonly count: number
 	readonly checked: boolean
+	readonly count: number
+	readonly severity: Severity
 }
 
-export function htmlSeverity(props: Props): HTMLElement {
+export function htmlSeverity(props: Props): HTMLDivElement {
 	// 1. Clone the template; this will become our component
 	const clone = template.content.cloneNode(true)
 	if (!(clone instanceof DocumentFragment))
@@ -37,7 +38,7 @@ export function htmlSeverity(props: Props): HTMLElement {
 
 	// 4. Extract the HTMLElement from the component and return it
 	const firstChild = clone.firstChild
-	if (!(firstChild instanceof HTMLElement))
+	if (!(firstChild instanceof HTMLDivElement))
 		throw new TypeError("firstChild is not an HTMLElement", {
 			cause: { firstChild, clone },
 		})
@@ -46,6 +47,18 @@ export function htmlSeverity(props: Props): HTMLElement {
 
 function toggleSeverity(severity: Severity) {
 	return (ev: Event) => {
-		console.log("Toggled severity:", severity, ev)
+		const checkbox = ev.target
+		if (!(checkbox instanceof HTMLInputElement))
+			throw new TypeError(
+				"toggleSeverity must be registered on an HTMLInputElement",
+				{
+					cause: { ev, checkbox },
+				},
+			)
+
+		void loadState().then(state => {
+			state.coderabbit.visibilityState[severity] = checkbox.checked
+			return saveState(state)
+		})
 	}
 }

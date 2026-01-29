@@ -42,12 +42,18 @@ function handleSaveAsDefault(this: HTMLButtonElement, _ev: Event) {
 }
 
 import { severities } from "./severity.ts"
+import { loadState } from "./state.ts"
 import { htmlSeverity } from "./templates/severity.ts"
 
+const state = await loadState()
 for (const severity of severities) {
 	const container = document.getElementById("severityControls")
 	if (!container) throw new Error("severityControls container not found")
 
-	const newControl = htmlSeverity({ severity, count: 0, checked: true })
+	const newControl = htmlSeverity({
+		severity,
+		count: 0,
+		checked: state.coderabbit.visibilityState[severity],
+	})
 	container.appendChild(newControl)
 }
