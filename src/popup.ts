@@ -7,7 +7,7 @@ register(
 	handleCodeRabbitAllToggle,
 )
 
-function handleCodeRabbitAllToggle(this: HTMLInputElement, ev: Event) {
+function handleCodeRabbitAllToggle(this: HTMLInputElement, _ev: Event) {
 	console.log("checked", this.checked)
 }
 
@@ -18,13 +18,13 @@ register(
 	handleCustomBotAllToggle,
 )
 
-function handleCustomBotAllToggle(this: HTMLInputElement, ev: Event) {
+function handleCustomBotAllToggle(this: HTMLInputElement, _ev: Event) {
 	console.log("checked", this.checked)
 }
 
 register("#addBotBtn", HTMLButtonElement, "click", handleAddCustomBots)
 
-function handleAddCustomBots(this: HTMLButtonElement, ev: Event) {
+function handleAddCustomBots(this: HTMLButtonElement, _ev: Event) {
 	console.log("Add Custom Bots clicked")
 }
 
@@ -37,7 +37,7 @@ function handleAddCustomBots2(this: HTMLInputElement, ev: KeyboardEvent) {
 
 register("#saveAsDefaultBtn", HTMLButtonElement, "click", handleSaveAsDefault)
 
-function handleSaveAsDefault(this: HTMLButtonElement, ev: Event) {
+function handleSaveAsDefault(this: HTMLButtonElement, _ev: Event) {
 	console.log("Save as Default clicked")
 }
 
