@@ -1,0 +1,51 @@
+import type { Severity } from "../severity.ts"
+import html from "./severity.template.html"
+
+const template = document.createElement("template")
+template.innerHTML = html
+
+interface Props {
+	readonly severity: Severity
+	readonly count: number
+	readonly checked: boolean
+}
+
+export function htmlSeverity(props: Props): HTMLElement {
+	// 1. Clone the template; this will become our component
+	const clone = template.content.cloneNode(true)
+	if (!(clone instanceof DocumentFragment))
+		throw new TypeError("cloneNode did not return a DocumentFragment", {
+			cause: { clone, template },
+		})
+
+	// 2. Extract references from the component
+	const refs = {
+		name: clone.querySelector<HTMLSpanElement>('[data-ref="name"]'),
+		count: clone.querySelector<HTMLSpanElement>('[data-ref="count"]'),
+		checkbox: clone.querySelector<HTMLInputElement>('[data-ref="checkbox"]'),
+	}
+	if (!refs.name || !refs.count || !refs.checkbox)
+		throw new Error("Missing required refs", {
+			cause: { refs, clone },
+		})
+
+	// 3. Setup the component
+	refs.name.textContent = props.severity
+	refs.count.textContent = `(${props.count})`
+	refs.checkbox.checked = props.checked
+	refs.checkbox.addEventListener("change", toggleSeverity(props.severity))
+
+	// 4. Extract the HTMLElement from the component and return it
+	const firstChild = clone.firstChild
+	if (!(firstChild instanceof HTMLElement))
+		throw new TypeError("firstChild is not an HTMLElement", {
+			cause: { firstChild, clone },
+		})
+	return firstChild
+}
+
+function toggleSeverity(severity: Severity) {
+	return (ev: Event) => {
+		console.log("Toggled severity:", severity, ev)
+	}
+}
