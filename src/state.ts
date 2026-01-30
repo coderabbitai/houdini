@@ -11,23 +11,9 @@ interface CodeRabbitState {
 	visibilityState: VisibilityState
 }
 
-interface State extends Record<string, unknown> {
+export interface State extends Record<string, unknown> {
 	coderabbit: CodeRabbitState
 	customBots: CustomBotsState
-}
-
-function defaultState(): State {
-	return {
-		coderabbit: {
-			visibilityState: {
-				[Severity.Critical]: true,
-				[Severity.Major]: true,
-				[Severity.Minor]: true,
-			},
-			showAllState: true,
-		},
-		customBots: {},
-	}
 }
 
 function getSessionKey(tabId: number): string {
@@ -86,7 +72,7 @@ export async function loadState(): Promise<State> {
 	const sync = await loadSync()
 	if (sync) return sync
 
-	return defaultState()
+	return newState()
 }
 
 async function loadSync() {
@@ -99,6 +85,20 @@ async function loadSync() {
 	return sync
 }
 
+function newState(): State {
+	return {
+		coderabbit: {
+			visibilityState: {
+				[Severity.Critical]: true,
+				[Severity.Major]: true,
+				[Severity.Minor]: true,
+			},
+			showAllState: true,
+		},
+		customBots: {},
+	}
+}
+
 export async function saveSession(state: State): Promise<void> {
 	return storage.session.set(state)
 }
@@ -107,5 +107,5 @@ export async function saveSync(state: State): Promise<void> {
 	return storage.sync.set(state)
 }
 
-if (!isState(defaultState()))
+if (!isState(newState()))
 	throw new TypeError("defaultState is not a valid State")

@@ -5,10 +5,10 @@
  * @module
  */
 
-import type { Severity } from "./severity.ts"
-import type { CustomBotsState, VisibilityState } from "./state.ts"
+import type { Severity, SeverityCount } from "./severity.ts"
+import type { State, VisibilityState } from "./state.ts"
 
-export function getAvailableSeverities(): Record<Severity, number> {
+export function getAvailableSeverities(): SeverityCount {
 	function includesSeverity(text: string): Severity | undefined {
 		if (text.includes("Critical")) return "Critical"
 		if (text.includes("Major")) return "Major"
@@ -22,7 +22,7 @@ export function getAvailableSeverities(): Record<Severity, number> {
 		),
 	)
 
-	const counts: Record<Severity, number> = {
+	const counts: SeverityCount = {
 		["Critical"]: 0,
 		["Major"]: 0,
 		["Minor"]: 0,
@@ -53,11 +53,7 @@ export function getAvailableSeverities(): Record<Severity, number> {
 	return counts
 }
 
-export function applyVisibilityFilter(
-	coderabbitVisibilityState: VisibilityState,
-	coderabbitShowAllState: boolean,
-	customBots: CustomBotsState,
-): void {
+export function applyVisibilityFilter(state: State): void {
 	function getTurboFrameSeverity(turboFrame: HTMLElement) {
 		const inlineContainers = Array.from(
 			turboFrame.querySelectorAll(".js-inline-comments-container"),
@@ -86,7 +82,7 @@ export function applyVisibilityFilter(
 	}
 
 	function isCustomBotHidden(timelineItem: HTMLDivElement) {
-		if (Object.keys(customBots).length === 0) return false
+		if (Object.keys(state.customBots).length === 0) return false
 
 		const authorLinks = Array.from(
 			timelineItem.querySelectorAll<HTMLAnchorElement>("a.author"),
@@ -95,7 +91,7 @@ export function applyVisibilityFilter(
 		for (const authorLink of authorLinks) {
 			const authorName = authorLink.textContent.trim().toLowerCase()
 
-			for (const [botName, showAll] of Object.entries(customBots)) {
+			for (const [botName, showAll] of Object.entries(state.customBots)) {
 				if (authorName.includes(botName.toLowerCase())) {
 					return !showAll
 				}
@@ -113,14 +109,14 @@ export function applyVisibilityFilter(
 
 	function updateTurboFrameVisibility(
 		turboFrames: HTMLElement[],
-		coderabbitVisibilityState: Record<Severity, boolean>,
+		visibilityState: VisibilityState,
 	) {
 		let hasVisibleTurboFrame = false
 
 		for (const turboFrame of turboFrames) {
 			const severity = getTurboFrameSeverity(turboFrame)
 
-			if (severity && coderabbitVisibilityState[severity]) {
+			if (severity && visibilityState[severity]) {
 				turboFrame.style.display = ""
 				turboFrame.removeAttribute("data-coderabbit-hidden")
 				hasVisibleTurboFrame = true
@@ -156,11 +152,16 @@ export function applyVisibilityFilter(
 			),
 		)
 
-		if (!coderabbitShowAllState) {
+		if (!state.coderabbit.showAllState) {
 			container.style.display = ""
 			container.removeAttribute("data-coderabbit-hidden")
 
-			if (!updateTurboFrameVisibility(turboFrames, coderabbitVisibilityState)) {
+			if (
+				!updateTurboFrameVisibility(
+					turboFrames,
+					state.coderabbit.visibilityState,
+				)
+			) {
 				container.style.display = "none"
 				container.setAttribute("data-coderabbit-hidden", "true")
 			}
@@ -174,7 +175,7 @@ export function applyVisibilityFilter(
 		for (const turboFrame of turboFrames) {
 			const severity = getTurboFrameSeverity(turboFrame)
 
-			if (severity && !coderabbitVisibilityState[severity]) {
+			if (severity && !state.coderabbit.visibilityState[severity]) {
 				turboFrame.style.display = "none"
 				turboFrame.setAttribute("data-coderabbit-hidden", "true")
 				continue
