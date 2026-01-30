@@ -37,6 +37,8 @@
 		"lint:fix": "eslint --fix --quiet .; markdownlint-cli2 \"**/*.md\" --fix; prettier --list-different --write .",
 		"package": "node esbuild.ts && web-ext build --overwrite-dest",
 		"start": "node esbuild.ts && web-ext run --no-reload",
+		"test": "vitest run",
+		"test:watch": "vitest",
 		"web-ext": "web-ext"
 	},
 	"devDependencies": {
