@@ -3,7 +3,7 @@ import { Severity } from "./severity.js"
 import { isSeverity } from "./severity.ts"
 import { getTabId } from "./tabs.ts"
 
-type CustomBotsState = Record<string, boolean>
+export type CustomBotsState = Record<string, boolean>
 type VisibilityState = Record<Severity, boolean>
 
 interface CodeRabbitState {
