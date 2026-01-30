@@ -6,7 +6,7 @@
  */
 
 import type { Severity } from "./severity.ts"
-import type { CustomBotsState } from "./state.ts"
+import type { CustomBotsState, VisibilityState } from "./state.ts"
 
 export function getAvailableSeverities(): Record<Severity, number> {
 	function includesSeverity(text: string): Severity | undefined {
@@ -54,7 +54,7 @@ export function getAvailableSeverities(): Record<Severity, number> {
 }
 
 export function applyVisibilityFilter(
-	coderabbitVisibilityState: Record<Severity, boolean>,
+	coderabbitVisibilityState: VisibilityState,
 	coderabbitShowAllState: boolean,
 	customBots: CustomBotsState,
 ): void {

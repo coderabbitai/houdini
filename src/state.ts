@@ -4,7 +4,7 @@ import { isSeverity } from "./severity.ts"
 import { getTabId } from "./tabs.ts"
 
 export type CustomBotsState = Record<string, boolean>
-type VisibilityState = Record<Severity, boolean>
+export type VisibilityState = Record<Severity, boolean>
 
 interface CodeRabbitState {
 	showAllState: boolean
@@ -58,7 +58,7 @@ function isState(value: unknown): value is State {
 	return true
 }
 
-function isVisibilityState(value: unknown): value is VisibilityState {
+export function isVisibilityState(value: unknown): value is VisibilityState {
 	if (!value || typeof value !== "object") return false
 
 	return Object.entries(value).every(
