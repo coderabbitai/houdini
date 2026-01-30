@@ -1,11 +1,25 @@
+import { applyFilters } from "./scripting.ts"
 import { severities, Severity } from "./severity.ts"
 import { loadState, saveSession, saveSync } from "./state.ts"
+import { getTabId } from "./tabs.ts"
+
+export function handleAddCustomBotsClick(this: HTMLButtonElement): void {
+	console.log("Add Custom Bots clicked")
+}
+
+export function handleAddCustomBotsKey(
+	this: HTMLInputElement,
+	ev: KeyboardEvent,
+): void {
+	if (ev.key !== "Enter") return
+	console.log("Add Custom Bots clicked via Enter key")
+}
 
 export async function handleCodeRabbitAllToggle(
 	this: HTMLInputElement,
-	_ev: Event,
 ): Promise<void> {
-	const state = await loadState()
+	const tabId = await getTabId()
+	const state = await loadState(tabId)
 
 	state.coderabbit.showAllState = this.checked
 	state.coderabbit.visibilityState = {
@@ -28,34 +42,19 @@ export async function handleCodeRabbitAllToggle(
 
 		checkbox.checked = this.checked
 	}
+
+	if (tabId) await applyFilters(tabId, state)
 }
 
-export function handleCustomBotAllToggle(
-	this: HTMLInputElement,
-	_ev: Event,
-): void {
+export function handleCustomBotAllToggle(this: HTMLInputElement): void {
 	console.log("checked", this.checked)
-}
-
-export function handleAddCustomBotsClick(
-	this: HTMLButtonElement,
-	_ev: Event,
-): void {
-	console.log("Add Custom Bots clicked")
-}
-
-export function handleAddCustomBotsKey(
-	this: HTMLInputElement,
-	ev: KeyboardEvent,
-): void {
-	if (ev.key !== "Enter") return
-	console.log("Add Custom Bots clicked via Enter key")
 }
 
 export async function handleSaveAsDefault(
 	this: HTMLButtonElement,
-	_ev: Event,
 ): Promise<void> {
-	const state = await loadState()
+	const tabId = await getTabId()
+	const state = await loadState(tabId)
 	await saveSync(state)
+	if (tabId) await applyFilters(tabId, state)
 }

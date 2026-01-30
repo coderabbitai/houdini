@@ -55,8 +55,8 @@ export async function setupPopup(): Promise<PopupContext> {
 
 	register("#saveAsDefaultBtn", HTMLButtonElement, "click", handleSaveAsDefault)
 
-	const state = await loadState()
 	const tabId = await getTabId()
+	const state = await loadState(tabId)
 	const foundSeverities = await getSeveritiesFromTab(tabId)
 
 	for (const severity of severities) {
@@ -67,6 +67,7 @@ export async function setupPopup(): Promise<PopupContext> {
 			checked: state.coderabbit.visibilityState[severity],
 			count: foundSeverities[severity],
 			severity,
+			tabId,
 		})
 
 		container.appendChild(newControl)

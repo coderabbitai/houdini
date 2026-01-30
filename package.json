@@ -35,7 +35,7 @@
 		"format": "prettier --write .",
 		"lint": "tsgo --noEmit && eslint . && markdownlint-cli2 \"**/*.md\" && prettier --check .",
 		"lint:fix": "eslint --fix --quiet .; markdownlint-cli2 \"**/*.md\" --fix; prettier --list-different --write .",
-		"package": "web-ext build",
+		"package": "node esbuild.ts && web-ext build --overwrite-dest",
 		"start": "node esbuild.ts && web-ext run --no-reload",
 		"web-ext": "web-ext"
 	},

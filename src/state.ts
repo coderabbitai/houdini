@@ -1,7 +1,6 @@
 import { storage } from "webextension-polyfill"
 import { Severity } from "./severity.js"
 import { isSeverity } from "./severity.ts"
-import { getTabId } from "./tabs.ts"
 
 export type CustomBotsState = Record<string, boolean>
 export type VisibilityState = Record<Severity, boolean>
@@ -52,9 +51,10 @@ export function isVisibilityState(value: unknown): value is VisibilityState {
 	)
 }
 
-async function loadSession(): Promise<State | undefined> {
-	const tabId = await getTabId()
-	if (!tabId) return
+async function loadSession(
+	tabId: number | undefined,
+): Promise<State | undefined> {
+	if (!tabId) return undefined
 
 	const sessionKey = getSessionKey(tabId)
 	const session = await storage.session.get(sessionKey)
@@ -62,11 +62,12 @@ async function loadSession(): Promise<State | undefined> {
 		console.warn("Session state is invalid", { session })
 		return
 	}
+
 	return session
 }
 
-export async function loadState(): Promise<State> {
-	const session = await loadSession()
+export async function loadState(tabId: number | undefined): Promise<State> {
+	const session = await loadSession(tabId)
 	if (session) return session
 
 	const sync = await loadSync()

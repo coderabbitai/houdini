@@ -1,3 +1,4 @@
+import { applyFilters } from "../scripting.ts"
 import type { Severity } from "../severity.ts"
 import { loadState, saveSession } from "../state.ts"
 import html from "./severity.template.html"
@@ -9,6 +10,7 @@ interface Props {
 	readonly checked: boolean
 	readonly count: number
 	readonly severity: Severity
+	readonly tabId: number | undefined
 }
 
 export function htmlSeverity(props: Props): HTMLDivElement {
@@ -35,7 +37,7 @@ export function htmlSeverity(props: Props): HTMLDivElement {
 	refs.count.textContent = `(${props.count})`
 	refs.checkbox.checked = props.checked
 	refs.checkbox.setAttribute("data-severity", props.severity)
-	refs.checkbox.addEventListener("change", toggleSeverity(props.severity))
+	refs.checkbox.addEventListener("change", toggleSeverity(props))
 
 	// 4. Extract the HTMLElement from the component and return it
 	const firstChild = clone.firstChild
@@ -46,7 +48,7 @@ export function htmlSeverity(props: Props): HTMLDivElement {
 	return firstChild
 }
 
-function toggleSeverity(severity: Severity) {
+function toggleSeverity(props: Props) {
 	return (ev: Event) => {
 		const checkbox = ev.target
 		if (!(checkbox instanceof HTMLInputElement))
@@ -57,9 +59,11 @@ function toggleSeverity(severity: Severity) {
 				},
 			)
 
-		void loadState().then(state => {
-			state.coderabbit.visibilityState[severity] = checkbox.checked
-			return saveSession(state)
+		void loadState(props.tabId).then(async state => {
+			state.coderabbit.visibilityState[props.severity] = checkbox.checked
+			await saveSession(state)
+
+			if (props.tabId) await applyFilters(props.tabId, state)
 		})
 	}
 }
