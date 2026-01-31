@@ -38,6 +38,7 @@
 		"package": "node esbuild.ts && web-ext build --overwrite-dest",
 		"start": "node esbuild.ts && web-ext run --no-reload",
 		"test": "vitest run",
+		"test:coverage": "vitest run --coverage",
 		"test:watch": "vitest",
 		"web-ext": "web-ext"
 	},
