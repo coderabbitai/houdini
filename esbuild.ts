@@ -1,6 +1,6 @@
-import * as esbuild from "esbuild"
+import { build } from "esbuild"
 
-await esbuild.build({
+await build({
 	banner: {
 		js: `// Copyright 2026 CodeRabbit
 
