@@ -33,7 +33,6 @@ jobs:
       - run: pnpm run build --noEmit
       - run: pnpm run lint
       - run: pnpm run test
-      - run: pnpm run test:coverage
 
       - if: github.actor != 'nektos/act'
         uses: actions/upload-artifact@v6
