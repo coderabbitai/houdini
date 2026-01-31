@@ -1,0 +1,10 @@
+.pnpm-store/
+coverage/
+dist/
+docs/
+node_modules/
+out/
+
+package-lock.json
+pnpm-lock.yaml
+yarn.lock

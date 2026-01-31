@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" href="popup.css" />
+		<script type="module" src="popup.js"></script>
+	</head>
+
+	<body>
+		<div class="header">
+			<h1>Houdini</h1>
+			<p class="subtext">
+				<span class="show-label">Show</span>
+				<span class="separator">|</span>
+				<span class="hide-label">Hide</span>
+				<span> Bot Comments</span>
+			</p>
+		</div>
+
+		<!-- CodeRabbit Section -->
+		<div class="section-title">CodeRabbit</div>
+
+		<!-- All toggle -->
+		<div id="coderabbitAllToggle" class="filter-item">
+			<div class="severity-label">
+				<span>All</span>
+			</div>
+			<label class="toggle-switch">
+				<input type="checkbox" id="coderabbitAllCheckbox" checked />
+				<span class="slider"></span>
+			</label>
+		</div>
+
+		<!-- Severity filters -->
+		<div id="severityControls"></div>
+
+		<div class="divider"></div>
+
+		<!-- Other Bots Section -->
+		<div class="bot-section">
+			<div class="section-title">Other Bots</div>
+
+			<div class="bot-input-group">
+				<input type="text" id="botNameInput" placeholder="e.g. cursor, qodo" />
+				<button id="addBotBtn">Add</button>
+			</div>
+
+			<!-- All toggle for custom bots (hidden by default) -->
+			<div id="customBotAllToggle" class="filter-item" style="display: none">
+				<div class="severity-label">
+					<span>All</span>
+				</div>
+				<label class="toggle-switch">
+					<input type="checkbox" id="customBotAllCheckbox" />
+					<span class="slider"></span>
+				</label>
+			</div>
+
+			<div id="customBotList"></div>
+		</div>
+
+		<div class="divider"></div>
+
+		<!-- Save as Default button -->
+		<button id="saveAsDefaultBtn" class="save-btn">Save as Default</button>
+
+		<div id="status"></div>
+	</body>
+</html>

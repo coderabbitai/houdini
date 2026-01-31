@@ -1,0 +1,65 @@
+{
+	"name": "@coderabbitai/houdini",
+	"version": "0.0.0",
+	"description": "Show or hide bot comments on GitHub PRs",
+	"keywords": [
+		"browser-extension",
+		"chrome-extension",
+		"coderabbit",
+		"github",
+		"pull-request",
+		"comments"
+	],
+	"homepage": "https://github.com/coderabbitai/houdini",
+	"bugs": {
+		"url": "https://github.com/coderabbitai/houdini/issues"
+	},
+	"license": "Apache-2.0",
+	"author": {
+		"name": "CodeRabbit",
+		"email": "support@coderabbit.ai",
+		"url": "https://github.com/coderabbitai"
+	},
+	"contributors": [
+		{
+			"name": "arvindsoni80",
+			"url": "https://github.com/arvindsoni80/houdini"
+		}
+	],
+	"repository": "github:coderabbitai/houdini",
+	"scripts": {
+		"build": "node esbuild.ts",
+		"clean": "rm -rf coverage dist docs node_modules out tsconfig.tsbuildinfo",
+		"dev": "node esbuild.ts && web-ext run --devtools --no-reload",
+		"dev:watch": "node esbuild.ts && web-ext run --devtools",
+		"format": "prettier --write .",
+		"lint": "tsgo --noEmit && eslint . && markdownlint-cli2 \"**/*.md\" && prettier --check .",
+		"lint:fix": "eslint --fix --quiet .; markdownlint-cli2 \"**/*.md\" --fix; prettier --list-different --write .",
+		"package": "node esbuild.ts && web-ext build --overwrite-dest",
+		"start": "node esbuild.ts && web-ext run --no-reload",
+		"test": "vitest run",
+		"test:coverage": "vitest run --coverage",
+		"test:watch": "vitest",
+		"web-ext": "web-ext"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.39.2",
+		"@types/webextension-polyfill": "^0.12.4",
+		"@typescript/native-preview": "7.0.0-dev.20260117.1",
+		"@vitest/coverage-v8": "^4.0.17",
+		"esbuild": "^0.27.2",
+		"eslint": "^9.39.2",
+		"eslint-config-prettier": "^10.1.8",
+		"globals": "^17.0.0",
+		"jiti": "^2.6.1",
+		"markdownlint-cli2": "^0.20.0",
+		"prettier": "^3.8.0",
+		"typedoc": "^0.28.16",
+		"typescript": "^5.9.3",
+		"typescript-eslint": "^8.53.0",
+		"vitest": "^4.0.17",
+		"web-ext": "^9.2.0",
+		"webextension-polyfill": "^0.12.0"
+	},
+	"type": "module"
+}

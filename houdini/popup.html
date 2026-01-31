@@ -1,293 +1,295 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <style>
-    body {
-      width: 320px;
-      padding: 15px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    }
-    .header {
-      margin-bottom: 16px;
-    }
-    h1 {
-      margin: 0 0 2px 0;
-      font-size: 18px;
-      font-weight: 600;
-      color: #24292f;
-    }
-    .subtext {
-      margin: 0;
-      font-size: 12px;
-      font-weight: 400;
-      color: #24292f;
-    }
-    .subtext .show-label {
-      background-color: #2da44e;
-      color: white;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-weight: 500;
-    }
-    .subtext .hide-label {
-      background-color: #ccc;
-      color: #24292f;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-weight: 500;
-    }
-    .subtext .separator {
-      margin: 0 4px;
-      color: #57606a;
-    }
-    .section-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: #24292f;
-      margin-bottom: 8px;
-    }
-    .filter-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px;
-      background-color: #f6f8fa;
-      border-radius: 6px;
-      margin-bottom: 8px;
-    }
-    .severity-label {
-      font-size: 13px;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .count {
-      color: #57606a;
-      font-size: 11px;
-    }
-    
-    /* Toggle Switch Styles */
-    .toggle-switch {
-      position: relative;
-      display: inline-block;
-      width: 44px;
-      height: 24px;
-    }
-    .toggle-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: 0.3s;
-      border-radius: 24px;
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: 0.3s;
-      border-radius: 50%;
-    }
-    input:checked + .slider {
-      background-color: #2da44e;
-    }
-    input:checked + .slider:before {
-      transform: translateX(20px);
-    }
-    .slider:hover {
-      opacity: 0.9;
-    }
-    
-    .divider {
-      margin: 15px 0;
-      border-top: 1px solid #d0d7de;
-    }
-    .save-btn {
-      width: 100%;
-      padding: 8px;
-      font-size: 13px;
-      border: 1px solid #1f6feb;
-      border-radius: 6px;
-      background-color: #1f6feb;
-      color: white;
-      cursor: pointer;
-      font-weight: 500;
-      margin-top: 12px;
-    }
-    .save-btn:hover {
-      background-color: #1a5ecc;
-      border-color: #1a5ecc;
-    }
-    
-    /* Custom bot styles */
-    .bot-section {
-      margin-top: 12px;
-    }
-    .bot-input-group {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 10px;
-    }
-    #botNameInput {
-      flex: 1;
-      padding: 6px 8px;
-      font-size: 12px;
-      border: 1px solid #d0d7de;
-      border-radius: 4px;
-      font-family: inherit;
-    }
-    #botNameInput:focus {
-      outline: none;
-      border-color: #1f6feb;
-    }
-    #addBotBtn {
-      padding: 6px 12px;
-      font-size: 12px;
-      border: 1px solid #1f6feb;
-      border-radius: 4px;
-      background-color: #1f6feb;
-      color: white;
-      cursor: pointer;
-      font-weight: 500;
-    }
-    #addBotBtn:hover {
-      background-color: #1a5ecc;
-    }
-    #customBotList {
-      max-height: 200px;
-      overflow-y: auto;
-    }
-    .custom-bot-item {
-      display: flex;
-      align-items: center;
-      padding: 6px 8px;
-      background-color: #f6f8fa;
-      border-radius: 4px;
-      margin-bottom: 6px;
-      gap: 8px;
-    }
-    .bot-name {
-      font-size: 12px;
-      font-weight: 500;
-      color: #24292f;
-      flex: 1;
-    }
-    .remove-btn {
-      padding: 2px 8px;
-      font-size: 14px;
-      border: 1px solid #d0d7de;
-      border-radius: 4px;
-      background-color: white;
-      color: #cf222e;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .remove-btn:hover {
-      background-color: #ffebe9;
-    }
-    .no-bots {
-      font-size: 12px;
-      color: #57606a;
-      text-align: center;
-      padding: 12px;
-      font-style: italic;
-    }
-    
-    #status {
-      margin-top: 10px;
-      font-size: 12px;
-      color: #57606a;
-      text-align: center;
-      padding: 6px;
-      border-radius: 4px;
-    }
-    .success {
-      color: #1a7f37;
-      background-color: #dafbe1;
-    }
-    .error {
-      color: #cf222e;
-      background-color: #ffebe9;
-    }
-    .info {
-      color: #0969da;
-      background-color: #ddf4ff;
-    }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <h1>Houdini</h1>
-    <p class="subtext">
-      <span class="show-label">Show</span>
-      <span class="separator">|</span>
-      <span class="hide-label">Hide</span>
-      <span> Bot Comments</span>
-    </p>
-  </div>
-  
-  <!-- CodeRabbit Section -->
-  <div class="section-title">CodeRabbit</div>
-  
-  <!-- All toggle -->
-  <div id="coderabbitAllToggle" class="filter-item">
-    <div class="severity-label">
-      <span>All</span>
-    </div>
-    <label class="toggle-switch">
-      <input type="checkbox" id="coderabbitAllCheckbox" checked>
-      <span class="slider"></span>
-    </label>
-  </div>
-  
-  <!-- Severity filters -->
-  <div id="severityControls"></div>
-  
-  <div class="divider"></div>
-  
-  <!-- Other Bots Section -->
-  <div class="bot-section">
-    <div class="section-title">Other Bots</div>
-    
-    <div class="bot-input-group">
-      <input type="text" id="botNameInput" placeholder="e.g. cursor, qodo" />
-      <button id="addBotBtn">Add</button>
-    </div>
-    
-    <!-- All toggle for custom bots (hidden by default) -->
-    <div id="customBotAllToggle" class="filter-item" style="display: none;">
-      <div class="severity-label">
-        <span>All</span>
-      </div>
-      <label class="toggle-switch">
-        <input type="checkbox" id="customBotAllCheckbox">
-        <span class="slider"></span>
-      </label>
-    </div>
-    
-    <div id="customBotList"></div>
-  </div>
-  
-  <div class="divider"></div>
-  
-  <!-- Save as Default button -->
-  <button id="saveAsDefaultBtn" class="save-btn">Save as Default</button>
-  
-  <div id="status"></div>
-  <script src="popup.js"></script>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<style>
+			body {
+				width: 320px;
+				padding: 15px;
+				font-family:
+					-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+					sans-serif;
+			}
+			.header {
+				margin-bottom: 16px;
+			}
+			h1 {
+				margin: 0 0 2px 0;
+				font-size: 18px;
+				font-weight: 600;
+				color: #24292f;
+			}
+			.subtext {
+				margin: 0;
+				font-size: 12px;
+				font-weight: 400;
+				color: #24292f;
+			}
+			.subtext .show-label {
+				background-color: #2da44e;
+				color: white;
+				padding: 2px 6px;
+				border-radius: 3px;
+				font-weight: 500;
+			}
+			.subtext .hide-label {
+				background-color: #ccc;
+				color: #24292f;
+				padding: 2px 6px;
+				border-radius: 3px;
+				font-weight: 500;
+			}
+			.subtext .separator {
+				margin: 0 4px;
+				color: #57606a;
+			}
+			.section-title {
+				font-size: 14px;
+				font-weight: 600;
+				color: #24292f;
+				margin-bottom: 8px;
+			}
+			.filter-item {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 8px;
+				background-color: #f6f8fa;
+				border-radius: 6px;
+				margin-bottom: 8px;
+			}
+			.severity-label {
+				font-size: 13px;
+				font-weight: 500;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+			}
+			.count {
+				color: #57606a;
+				font-size: 11px;
+			}
+
+			/* Toggle Switch Styles */
+			.toggle-switch {
+				position: relative;
+				display: inline-block;
+				width: 44px;
+				height: 24px;
+			}
+			.toggle-switch input {
+				opacity: 0;
+				width: 0;
+				height: 0;
+			}
+			.slider {
+				position: absolute;
+				cursor: pointer;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background-color: #ccc;
+				transition: 0.3s;
+				border-radius: 24px;
+			}
+			.slider:before {
+				position: absolute;
+				content: "";
+				height: 18px;
+				width: 18px;
+				left: 3px;
+				bottom: 3px;
+				background-color: white;
+				transition: 0.3s;
+				border-radius: 50%;
+			}
+			input:checked + .slider {
+				background-color: #2da44e;
+			}
+			input:checked + .slider:before {
+				transform: translateX(20px);
+			}
+			.slider:hover {
+				opacity: 0.9;
+			}
+
+			.divider {
+				margin: 15px 0;
+				border-top: 1px solid #d0d7de;
+			}
+			.save-btn {
+				width: 100%;
+				padding: 8px;
+				font-size: 13px;
+				border: 1px solid #1f6feb;
+				border-radius: 6px;
+				background-color: #1f6feb;
+				color: white;
+				cursor: pointer;
+				font-weight: 500;
+				margin-top: 12px;
+			}
+			.save-btn:hover {
+				background-color: #1a5ecc;
+				border-color: #1a5ecc;
+			}
+
+			/* Custom bot styles */
+			.bot-section {
+				margin-top: 12px;
+			}
+			.bot-input-group {
+				display: flex;
+				gap: 6px;
+				margin-bottom: 10px;
+			}
+			#botNameInput {
+				flex: 1;
+				padding: 6px 8px;
+				font-size: 12px;
+				border: 1px solid #d0d7de;
+				border-radius: 4px;
+				font-family: inherit;
+			}
+			#botNameInput:focus {
+				outline: none;
+				border-color: #1f6feb;
+			}
+			#addBotBtn {
+				padding: 6px 12px;
+				font-size: 12px;
+				border: 1px solid #1f6feb;
+				border-radius: 4px;
+				background-color: #1f6feb;
+				color: white;
+				cursor: pointer;
+				font-weight: 500;
+			}
+			#addBotBtn:hover {
+				background-color: #1a5ecc;
+			}
+			#customBotList {
+				max-height: 200px;
+				overflow-y: auto;
+			}
+			.custom-bot-item {
+				display: flex;
+				align-items: center;
+				padding: 6px 8px;
+				background-color: #f6f8fa;
+				border-radius: 4px;
+				margin-bottom: 6px;
+				gap: 8px;
+			}
+			.bot-name {
+				font-size: 12px;
+				font-weight: 500;
+				color: #24292f;
+				flex: 1;
+			}
+			.remove-btn {
+				padding: 2px 8px;
+				font-size: 14px;
+				border: 1px solid #d0d7de;
+				border-radius: 4px;
+				background-color: white;
+				color: #cf222e;
+				cursor: pointer;
+				font-weight: bold;
+			}
+			.remove-btn:hover {
+				background-color: #ffebe9;
+			}
+			.no-bots {
+				font-size: 12px;
+				color: #57606a;
+				text-align: center;
+				padding: 12px;
+				font-style: italic;
+			}
+
+			#status {
+				margin-top: 10px;
+				font-size: 12px;
+				color: #57606a;
+				text-align: center;
+				padding: 6px;
+				border-radius: 4px;
+			}
+			.success {
+				color: #1a7f37;
+				background-color: #dafbe1;
+			}
+			.error {
+				color: #cf222e;
+				background-color: #ffebe9;
+			}
+			.info {
+				color: #0969da;
+				background-color: #ddf4ff;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="header">
+			<h1>Houdini</h1>
+			<p class="subtext">
+				<span class="show-label">Show</span>
+				<span class="separator">|</span>
+				<span class="hide-label">Hide</span>
+				<span> Bot Comments</span>
+			</p>
+		</div>
+
+		<!-- CodeRabbit Section -->
+		<div class="section-title">CodeRabbit</div>
+
+		<!-- All toggle -->
+		<div id="coderabbitAllToggle" class="filter-item">
+			<div class="severity-label">
+				<span>All</span>
+			</div>
+			<label class="toggle-switch">
+				<input type="checkbox" id="coderabbitAllCheckbox" checked />
+				<span class="slider"></span>
+			</label>
+		</div>
+
+		<!-- Severity filters -->
+		<div id="severityControls"></div>
+
+		<div class="divider"></div>
+
+		<!-- Other Bots Section -->
+		<div class="bot-section">
+			<div class="section-title">Other Bots</div>
+
+			<div class="bot-input-group">
+				<input type="text" id="botNameInput" placeholder="e.g. cursor, qodo" />
+				<button id="addBotBtn">Add</button>
+			</div>
+
+			<!-- All toggle for custom bots (hidden by default) -->
+			<div id="customBotAllToggle" class="filter-item" style="display: none">
+				<div class="severity-label">
+					<span>All</span>
+				</div>
+				<label class="toggle-switch">
+					<input type="checkbox" id="customBotAllCheckbox" />
+					<span class="slider"></span>
+				</label>
+			</div>
+
+			<div id="customBotList"></div>
+		</div>
+
+		<div class="divider"></div>
+
+		<!-- Save as Default button -->
+		<button id="saveAsDefaultBtn" class="save-btn">Save as Default</button>
+
+		<div id="status"></div>
+		<script src="popup.js"></script>
+	</body>
 </html>

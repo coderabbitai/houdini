@@ -1,0 +1,26 @@
+{
+	"$schema": "https://json.schemastore.org/webextension.json",
+	"manifest_version": 3,
+	"name": "Houdini",
+	"version": "0.0.0",
+	"description": "Show or hide bot comments on GitHub PRs",
+	"permissions": ["activeTab", "scripting", "storage"],
+	"host_permissions": ["https://github.com/*"],
+	"action": {
+		"default_popup": "out/popup.html",
+		"default_icon": {
+			"1024": "houdini/icon128.png"
+		}
+	},
+	"icons": {
+		"1024": "houdini/icon128.png"
+	},
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "@coderabbitai-houdini",
+			"data_collection_permissions": {
+				"required": ["websiteContent"]
+			}
+		}
+	}
+}
